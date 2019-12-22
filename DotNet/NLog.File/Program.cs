@@ -102,25 +102,25 @@ namespace NLog.File
 			//Process all the jpg files in the source directory tree
 			foreach (FileInfo fi in sourceDir.GetFiles("*", SearchOption.AllDirectories))
 			{
-				//calculate the SHA string 
-				string mySHA = CalcSHA(fi, out int timerMs);
+				//calculate the SHA string for the file
+				var result = CalcSHA(fi);
 
 				// write to CSV file
 				csvFile.Info(string.Format(message, 
 											fi.FullName,
 											fi.DirectoryName,
 											fi.Length,
-											mySHA)
+											result.SHA)
 					);
 				
 				// insert row into CheckSum table
-				CheckSum_ins(	mySHA,
+				CheckSum_ins(	result.SHA,
 								fi.FullName, 
 								fi.Extension,
 								fi.CreationTimeUtc,
 								fi.DirectoryName,
 								fi.Length,
-								timerMs);
+								result.timerMs);
 			}
 		}
 
@@ -147,7 +147,8 @@ namespace NLog.File
 			}
 		}
 
-		static string CalcSHA(FileInfo fi, out int timerMs)
+		// calculate the SHA256 checksum for the file and return it with the elapsed processing time using tuple
+		static (string SHA, int timerMs) CalcSHA(FileInfo fi)
 		{
 			var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -161,10 +162,9 @@ namespace NLog.File
 			string bitString = BitConverter.ToString(bytes);
 
 			watch.Stop();
-			timerMs = (int)watch.ElapsedMilliseconds;
 			Console.WriteLine($"{fi.Name}, length: {fi.Length}, execution time: {watch.ElapsedMilliseconds} ms");
 
-			return bitString;
+			return (SHA: bitString, timerMs: (int)watch.ElapsedMilliseconds);
 		}
 
 		static void DbTest(string connectionString)
