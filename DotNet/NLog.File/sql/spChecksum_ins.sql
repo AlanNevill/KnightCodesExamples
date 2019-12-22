@@ -27,7 +27,9 @@ CREATE PROCEDURE dbo.spCheckSum_ins
 	@SHA			varchar(200),
 	@Folder			varchar(200),
 	@TheFileName	varchar(100),
+	@FileExt		varchar(10),
 	@FileSize		int,
+	@FileCreateDt	smalldatetime,
 	@TimerMs		int,
 	@Notes			varchar(200)
 
@@ -40,13 +42,17 @@ BEGIN
 	insert CheckSum(	SHA,
 						Folder,
 						TheFileName,
+						FileExt,
 						FileSize,
+						FileCreateDt,
 						TimerMs,
 						Notes)
 				values (@SHA,
 						@Folder,
 						@TheFileName,
+						@FileExt,
 						@FileSize,
+						@FileCreateDt,
 						@TimerMs,
 						@Notes)
 

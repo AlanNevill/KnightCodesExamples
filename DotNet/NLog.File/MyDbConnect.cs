@@ -26,8 +26,8 @@ namespace NLog.File
 
                 // Connect to SQL
                 SqlConnection connection = new SqlConnection(cnString);
-                    connection.Open();
-                    Cn = connection;
+                connection.Open();
+                Cn = connection;
             }
             catch (SqlException e)
             {

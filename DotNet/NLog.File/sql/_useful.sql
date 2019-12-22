@@ -1,12 +1,18 @@
 --_useful.sql
 
+-- git folder
+-- cd C:/Users/Ben/source/repos/AlanNevill/KnightCodesExamples
+
 use pops;
 
 -- test spCheckSum_ins
 exec spCheckSum_ins	@SHA			= '1a-3b-5c-7d-9e-0f',
 					@Folder			= 'c:\logs\nlog\',
 					@TheFileName	= 'file1.txt',
+					@FileExt		= '.php',
 					@FileSize		= 22,
+					@FileCreateDt	= '2019-12-22',
+					@TimerMs		= 9900034,
 					@Notes			= 'Notes 1'
 
 -- test data
@@ -24,7 +30,7 @@ having count(*) > 1
 
 
 -- select the files with duplicate SHA values
-select id, SHA, Folder, TheFileName
+select id, SHA, TheFileName, FileCreateDt
 from CheckSum
 where SHA in (
 	select SHA
