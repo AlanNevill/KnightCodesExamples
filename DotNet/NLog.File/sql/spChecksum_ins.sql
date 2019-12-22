@@ -28,6 +28,7 @@ CREATE PROCEDURE dbo.spCheckSum_ins
 	@Folder			varchar(200),
 	@TheFileName	varchar(100),
 	@FileSize		int,
+	@TimerMs		int,
 	@Notes			varchar(200)
 
 AS
@@ -40,11 +41,13 @@ BEGIN
 						Folder,
 						TheFileName,
 						FileSize,
+						TimerMs,
 						Notes)
 				values (@SHA,
 						@Folder,
 						@TheFileName,
 						@FileSize,
+						@TimerMs,
 						@Notes)
 
 

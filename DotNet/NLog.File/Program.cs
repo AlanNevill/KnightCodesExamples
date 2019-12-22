@@ -25,6 +25,8 @@ namespace NLog.File
 		{
 			logger.Info("Nlog starting");
 
+			args[0] = @"c:\logs";
+
 			if (ValidateFolder(args[0]))
 			{
 				DbTest(@"Server=(localDB)\MSSQLLocalDB;Integrated Security=true;database=pops");
@@ -96,7 +98,7 @@ namespace NLog.File
 			foreach (FileInfo fi in sourceDir.GetFiles("*", SearchOption.AllDirectories))
 			{
 				//calculate the SHA string 
-				string mySHA = CalcSHA(fi);
+				string mySHA = CalcSHA(fi, out int TimerMs);
 
 				// write to CSV file
 				csvFile.Info(string.Format(message, 
@@ -106,11 +108,11 @@ namespace NLog.File
 											mySHA)
 					);
 
-				CheckSum_ins(mySHA, fi.FullName, fi.DirectoryName, fi.Length);
+				CheckSum_ins(mySHA, fi.FullName, fi.DirectoryName, fi.Length, TimerMs);
 			}
 		}
 
-		private static void CheckSum_ins(string mySHA, string fullName, string directoryName, long fileLength)
+		private static void CheckSum_ins(string mySHA, string fullName, string directoryName, long fileLength, int TimerMs)
 		{
 			using (SqlCommand sqlCmd = new SqlCommand("spCheckSum_ins", Cn))
 			{
@@ -118,14 +120,15 @@ namespace NLog.File
 				sqlCmd.Parameters.AddWithValue("@SHA", mySHA);
 				sqlCmd.Parameters.AddWithValue("@Folder", directoryName);
 				sqlCmd.Parameters.AddWithValue("@TheFileName", fullName);
-				sqlCmd.Parameters.AddWithValue("@FileSize", fileLength);
+				sqlCmd.Parameters.AddWithValue("@FileSize", (int)fileLength);
+				sqlCmd.Parameters.AddWithValue("@TimerMs", TimerMs);
 				sqlCmd.Parameters.AddWithValue("@Notes", DBNull.Value);
 
 				sqlCmd.ExecuteNonQuery();
 			}
 		}
 
-		static string CalcSHA(FileInfo fi)
+		static string CalcSHA(FileInfo fi, out int TimerMs)
 		{
 			var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -139,6 +142,7 @@ namespace NLog.File
 			string bitString = BitConverter.ToString(bytes);
 
 			watch.Stop();
+			TimerMs = (int)watch.ElapsedMilliseconds;
 			Console.WriteLine($"{fi.Name}, length: {fi.Length}, execution time: {watch.ElapsedMilliseconds} ms");
 
 			return bitString;
@@ -156,6 +160,7 @@ namespace NLog.File
 				sqlCmd.Parameters.AddWithValue("@Folder", @"C:\Logs\");
 				sqlCmd.Parameters.AddWithValue("@TheFileName", "Csharp test filename 2.txt");
 				sqlCmd.Parameters.AddWithValue("@FileSize", 42);
+				sqlCmd.Parameters.AddWithValue("@TimerMs", 420000);
 				sqlCmd.Parameters.AddWithValue("@Notes", DBNull.Value);
 
 				sqlCmd.ExecuteNonQuery();
