@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -33,6 +35,19 @@ namespace NLog.File
             {
                 throw;
             }
+        }
+
+        public DataTable DupesTable ()
+        {
+            DataSet DupsDataSet = new DataSet("DupesDataSet");
+            DataTable dupsTable = new DataTable("dupes");
+            DupsDataSet.Tables.Add(dupsTable);
+            using (var da = new SqlDataAdapter("select * from CheckSumDups order by 2,1", Cn))
+            {
+                da.Fill(dupsTable);
+            }
+
+            return dupsTable;
         }
     }
 }

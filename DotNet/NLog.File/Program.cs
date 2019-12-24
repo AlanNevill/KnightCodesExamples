@@ -22,9 +22,16 @@ namespace NLog.File
 		public static DirectoryInfo sourceDir;
 		public static Boolean truncateCheckSum = false;
 
+		public static MyDbConnect MyDb;
+
 		static void Main(string[] args)
 		{
 			logger.Info("Nlog starting");
+
+			MyDb = new MyDbConnect(@"Server = (localDB)\MSSQLLocalDB; Integrated Security = true; database = pops");
+
+			var dupes = MyDb.DupesTable();
+			ProcessDupes(dupes);
 
 			// check for 2nd argument supplied requesting truncate CheckSum table
 			if (args.Length==2)
@@ -34,7 +41,6 @@ namespace NLog.File
 
 			if (ValidateFolder(args[0]))
 			{
-				DbTest(@"Server=(localDB)\MSSQLLocalDB;Integrated Security=true;database=pops");
 				ProcessFiles(sourceDir);
 				CSVtest();
 			}
@@ -183,6 +189,16 @@ namespace NLog.File
 					sqlCmd.ExecuteNonQuery();
 				}
 			}
+		}
+
+		static void ProcessDupes(DataTable dupes)
+		{
+			DataTable myDupes = MyDb.DupesTable();
+			foreach(DataRow dupesRow in myDupes.Rows)
+			{
+				Console.WriteLine($"Id: {dupesRow.Field("Id")}, SHA: {dupesRow.Field('SHA')}");
+			}
+
 		}
 
 	}

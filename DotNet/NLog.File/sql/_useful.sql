@@ -39,3 +39,18 @@ where SHA in (
 	having count(*) > 1
 )
 order by 2,1
+
+
+-- insert the files with duplicate SHA values into CheckSumDups
+insert CheckSumDups(Id, SHA)
+select Id, SHA
+from CheckSum
+where SHA in (
+	select SHA
+	from CheckSum
+	group by SHA
+	having count(*) > 1
+)
+
+select * from CheckSumDups order by 2,1;
+
