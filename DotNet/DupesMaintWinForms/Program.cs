@@ -8,6 +8,9 @@ namespace DupesMaintWinForms
 {
     static class Program
     {
+        public static CheckSum checkSum1 { get; set; }
+
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

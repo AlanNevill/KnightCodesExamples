@@ -30,15 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.popsDataSet = new DupesMaintWinForms.popsDataSet();
-            this.checkSumDupsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.checkSumDupsTableAdapter = new DupesMaintWinForms.popsDataSetTableAdapters.CheckSumDupsTableAdapter();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sHADataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toDeleteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkSumDupsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.popsDataSet = new DupesMaintWinForms.popsDataSet();
+            this.checkSumDupsTableAdapter = new DupesMaintWinForms.popsDataSetTableAdapters.CheckSumDupsTableAdapter();
+            this.btnTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.popsDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSumDupsBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popsDataSet)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -56,50 +57,65 @@
             this.dataGridView1.Size = new System.Drawing.Size(943, 150);
             this.dataGridView1.TabIndex = 0;
             // 
-            // popsDataSet
+            // idDataGridViewTextBoxColumn
             // 
-            this.popsDataSet.DataSetName = "popsDataSet";
-            this.popsDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // sHADataGridViewTextBoxColumn
+            // 
+            this.sHADataGridViewTextBoxColumn.DataPropertyName = "SHA";
+            this.sHADataGridViewTextBoxColumn.HeaderText = "SHA";
+            this.sHADataGridViewTextBoxColumn.MinimumWidth = 600;
+            this.sHADataGridViewTextBoxColumn.Name = "sHADataGridViewTextBoxColumn";
+            this.sHADataGridViewTextBoxColumn.ReadOnly = true;
+            this.sHADataGridViewTextBoxColumn.Width = 600;
+            // 
+            // toDeleteDataGridViewTextBoxColumn
+            // 
+            this.toDeleteDataGridViewTextBoxColumn.DataPropertyName = "ToDelete";
+            this.toDeleteDataGridViewTextBoxColumn.HeaderText = "To Delete";
+            this.toDeleteDataGridViewTextBoxColumn.Name = "toDeleteDataGridViewTextBoxColumn";
             // 
             // checkSumDupsBindingSource
             // 
             this.checkSumDupsBindingSource.DataMember = "CheckSumDups";
             this.checkSumDupsBindingSource.DataSource = this.popsDataSet;
             // 
+            // popsDataSet
+            // 
+            this.popsDataSet.DataSetName = "popsDataSet";
+            this.popsDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
             // checkSumDupsTableAdapter
             // 
             this.checkSumDupsTableAdapter.ClearBeforeFill = true;
             // 
-            // idDataGridViewTextBoxColumn
+            // btnTest
             // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            // 
-            // sHADataGridViewTextBoxColumn
-            // 
-            this.sHADataGridViewTextBoxColumn.DataPropertyName = "SHA";
-            this.sHADataGridViewTextBoxColumn.HeaderText = "SHA";
-            this.sHADataGridViewTextBoxColumn.Name = "sHADataGridViewTextBoxColumn";
-            // 
-            // toDeleteDataGridViewTextBoxColumn
-            // 
-            this.toDeleteDataGridViewTextBoxColumn.DataPropertyName = "ToDelete";
-            this.toDeleteDataGridViewTextBoxColumn.HeaderText = "ToDelete";
-            this.toDeleteDataGridViewTextBoxColumn.Name = "toDeleteDataGridViewTextBoxColumn";
+            this.btnTest.Location = new System.Drawing.Point(13, 31);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(75, 23);
+            this.btnTest.TabIndex = 1;
+            this.btnTest.Text = "btnTest";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
             // SelectBySHA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(967, 450);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.dataGridView1);
             this.Name = "SelectBySHA";
-            this.Text = "Form1";
+            this.Text = "SelectBySHA";
             this.Load += new System.EventHandler(this.SelectBySHA_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.popsDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSumDupsBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.popsDataSet)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -113,6 +129,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn sHADataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn toDeleteDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Button btnTest;
     }
 }
 

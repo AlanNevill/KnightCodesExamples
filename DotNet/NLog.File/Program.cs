@@ -17,7 +17,7 @@ namespace NLog.File
 	{
 		public static Logger logger		= LogManager.GetLogger("fileLogger");
 		public static Logger csvFile	= LogManager.GetLogger("CSVfile");
-		public static SqlConnection Cn { get; set; }
+		//public static SqlConnection Cn { get; set; }
 
 		public static DirectoryInfo sourceDir;
 		public static Boolean truncateCheckSum = false;
@@ -30,7 +30,7 @@ namespace NLog.File
 
 			MyDb = new MyDbConnect(@"Server = (localDB)\MSSQLLocalDB; Integrated Security = true; database = pops");
 
-			ProcessDupes();
+			//ProcessDupes();
 
 			// check for 2nd argument supplied requesting truncate CheckSum table
 			if (args.Length==2)
@@ -129,6 +129,7 @@ namespace NLog.File
 			}
 		}
 
+
 		private static void CheckSum_ins(	string mySHA,
 											string fullName,
 											string fileExt,
@@ -137,12 +138,12 @@ namespace NLog.File
 											long fileLength,
 											int timerMs)
 		{
-			using (SqlCommand sqlCmd = new SqlCommand("spCheckSum_ins", Cn))
+			using (SqlCommand sqlCmd = new SqlCommand("spCheckSum_ins", MyDb.Cn))
 			{
 				sqlCmd.CommandType = CommandType.StoredProcedure;
 				sqlCmd.Parameters.AddWithValue("@SHA", mySHA);
-				sqlCmd.Parameters.AddWithValue("@Folder", directoryName);
-				sqlCmd.Parameters.AddWithValue("@TheFileName", fullName);
+				sqlCmd.Parameters.AddWithValue("@Folder", @directoryName);
+				sqlCmd.Parameters.AddWithValue("@TheFileName", @fullName);
 				sqlCmd.Parameters.AddWithValue("@FileExt", fileExt);
 				sqlCmd.Parameters.AddWithValue("@FileSize", (int)fileLength);
 				sqlCmd.Parameters.AddWithValue("@FileCreateDt", fileCreateDt);
@@ -151,6 +152,7 @@ namespace NLog.File
 				sqlCmd.ExecuteNonQuery();
 			}
 		}
+
 
 		// calculate the SHA256 checksum for the file and return it with the elapsed processing time using tuple
 		static (string SHA, int timerMs) CalcSHA(FileInfo fi)
@@ -175,14 +177,14 @@ namespace NLog.File
 		static void DbTest(string connectionString)
 		{
 			// open the DB connection and save in variable Cn
-			var dbCn = new MyDbConnect(connectionString);
-			Cn = dbCn.Cn;
+			//var dbCn = new MyDbConnect(connectionString);
+			//Cn = dbCn.Cn;
 
 			// if command line argument 2 is set to true
 			if (truncateCheckSum)
 			{
 				// clear the CheckSum table
-				using (SqlCommand sqlCmd = new SqlCommand("truncate table CheckSum", Cn))
+				using (SqlCommand sqlCmd = new SqlCommand("truncate table CheckSum", MyDb.Cn))
 				{
 					sqlCmd.CommandType = CommandType.Text;
 					sqlCmd.ExecuteNonQuery();

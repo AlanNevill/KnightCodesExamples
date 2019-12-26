@@ -1906,7 +1906,7 @@ SELECT Id, SHA, Folder, TheFileName, FileExt, FileSize, FileCreateDt, TimerMs, N
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, SHA, ToDelete FROM dbo.CheckSumDups";
+            this._commandCollection[0].CommandText = "SELECT Id, SHA, ToDelete FROM dbo.CheckSumDups order by 2,1";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
