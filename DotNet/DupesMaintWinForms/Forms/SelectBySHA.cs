@@ -43,7 +43,7 @@ namespace DupesMaintWinForms
             popsDataSet.CheckSumDataTable dupes = _popsDataSet.CheckSum;
 
             Form displayPhotos = new DisplayPhotos4SHA(dupes);
-            displayPhotos.Show();
+            displayPhotos.ShowDialog();
 
         }
     }
