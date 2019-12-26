@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quartz.Ninject", "Quartz.Ninject\Quartz.Ninject.csproj", "{7ADCC286-7FF0-40DA-8C57-20A1B00D7CD4}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smtp.Configuration", "Smtp.Configuration\Smtp.Configuration.csproj", "{9F1B38A6-96BB-4C69-B6B7-A93B053FB7A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLog.Database", "NLog.Database\NLog.Database.csproj", "{80FE317B-BAC7-4E7D-9D14-19E5C95B80B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupesMaintWPF", "DupesMaintWPF\DupesMaintWPF.csproj", "{FBE81E7E-70F0-4FF9-975D-1D08510302B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupesMaintWinForms", "DupesMaintWinForms\DupesMaintWinForms.csproj", "{FC00128B-053C-452B-A5E2-4923D8927370}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,14 @@ Global
 		{80FE317B-BAC7-4E7D-9D14-19E5C95B80B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80FE317B-BAC7-4E7D-9D14-19E5C95B80B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80FE317B-BAC7-4E7D-9D14-19E5C95B80B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBE81E7E-70F0-4FF9-975D-1D08510302B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBE81E7E-70F0-4FF9-975D-1D08510302B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBE81E7E-70F0-4FF9-975D-1D08510302B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBE81E7E-70F0-4FF9-975D-1D08510302B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC00128B-053C-452B-A5E2-4923D8927370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC00128B-053C-452B-A5E2-4923D8927370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC00128B-053C-452B-A5E2-4923D8927370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC00128B-053C-452B-A5E2-4923D8927370}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,5 +71,10 @@ Global
 		{E60813AA-8415-437A-9A34-2FB0C57002F1} = {C96108CA-8EED-4F9B-A656-CCB7D0569FCC}
 		{64C284BA-805A-4A6D-AF1B-BDF5E70E8835} = {B43B613E-3770-4CF4-9D86-72F2B8A656F2}
 		{80FE317B-BAC7-4E7D-9D14-19E5C95B80B3} = {B43B613E-3770-4CF4-9D86-72F2B8A656F2}
+		{FBE81E7E-70F0-4FF9-975D-1D08510302B5} = {B43B613E-3770-4CF4-9D86-72F2B8A656F2}
+		{FC00128B-053C-452B-A5E2-4923D8927370} = {B43B613E-3770-4CF4-9D86-72F2B8A656F2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5275505C-6209-4C4F-8F97-291FAB86F9E8}
 	EndGlobalSection
 EndGlobal
