@@ -37,17 +37,15 @@ namespace NLog.File
             }
         }
 
-        public DataTable DupesTable ()
+        public popsDataSet DupesTable ()
         {
-            DataSet DupsDataSet = new DataSet("DupesDataSet");
-            DataTable dupsTable = new DataTable("dupes");
-            DupsDataSet.Tables.Add(dupsTable);
+            popsDataSet dupsDataSet = new popsDataSet();
             using (var da = new SqlDataAdapter("select * from CheckSumDups order by 2,1", Cn))
             {
-                da.Fill(dupsTable);
+                da.Fill(dupsDataSet, "CheckSumDups");
             }
 
-            return dupsTable;
+            return dupsDataSet;
         }
     }
 }

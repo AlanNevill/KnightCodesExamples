@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="popsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CheckSum">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SHA" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Folder" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="TheFileName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="FileExt" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="FileSize" Type="int" Nullable="false" />
+          <Property Name="FileCreateDt" Type="smalldatetime" Nullable="false" />
+          <Property Name="TimerMs" Type="int" Nullable="false" />
+          <Property Name="Notes" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="CheckSumDups">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="SHA" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SHA" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ToDelete" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <Function Name="spCheckSum_ins" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SHA" Type="varchar" Mode="In" />
+          <Parameter Name="Folder" Type="varchar" Mode="In" />
+          <Parameter Name="TheFileName" Type="varchar" Mode="In" />
+          <Parameter Name="FileExt" Type="varchar" Mode="In" />
+          <Parameter Name="FileSize" Type="int" Mode="In" />
+          <Parameter Name="FileCreateDt" Type="smalldatetime" Mode="In" />
+          <Parameter Name="TimerMs" Type="int" Mode="In" />
+          <Parameter Name="Notes" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="popsModelStoreContainer">
+          <EntitySet Name="CheckSum" EntityType="Self.CheckSum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CheckSumDups" EntityType="Self.CheckSumDups" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="popsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CheckSum">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SHA" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Folder" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TheFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FileExt" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FileSize" Type="Int32" Nullable="false" />
+          <Property Name="FileCreateDt" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TimerMs" Type="Int32" Nullable="false" />
+          <Property Name="Notes" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CheckSumDup">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="SHA" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SHA" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ToDelete" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="popsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CheckSums" EntityType="Self.CheckSum" />
+          <EntitySet Name="CheckSumDups" EntityType="Self.CheckSumDup" />
+          <FunctionImport Name="spCheckSum_ins">
+            <Parameter Name="SHA" Mode="In" Type="String" />
+            <Parameter Name="Folder" Mode="In" Type="String" />
+            <Parameter Name="TheFileName" Mode="In" Type="String" />
+            <Parameter Name="FileExt" Mode="In" Type="String" />
+            <Parameter Name="FileSize" Mode="In" Type="Int32" />
+            <Parameter Name="FileCreateDt" Mode="In" Type="DateTime" />
+            <Parameter Name="TimerMs" Mode="In" Type="Int32" />
+            <Parameter Name="Notes" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="popsModelStoreContainer" CdmEntityContainer="popsEntities">
+          <EntitySetMapping Name="CheckSums">
+            <EntityTypeMapping TypeName="popsModel.CheckSum">
+              <MappingFragment StoreEntitySet="CheckSum">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SHA" ColumnName="SHA" />
+                <ScalarProperty Name="Folder" ColumnName="Folder" />
+                <ScalarProperty Name="TheFileName" ColumnName="TheFileName" />
+                <ScalarProperty Name="FileExt" ColumnName="FileExt" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="FileCreateDt" ColumnName="FileCreateDt" />
+                <ScalarProperty Name="TimerMs" ColumnName="TimerMs" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CheckSumDups">
+            <EntityTypeMapping TypeName="popsModel.CheckSumDup">
+              <MappingFragment StoreEntitySet="CheckSumDups">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SHA" ColumnName="SHA" />
+                <ScalarProperty Name="ToDelete" ColumnName="ToDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spCheckSum_ins" FunctionName="popsModel.Store.spCheckSum_ins" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -30,8 +30,7 @@ namespace NLog.File
 
 			MyDb = new MyDbConnect(@"Server = (localDB)\MSSQLLocalDB; Integrated Security = true; database = pops");
 
-			var dupes = MyDb.DupesTable();
-			ProcessDupes(dupes);
+			ProcessDupes();
 
 			// check for 2nd argument supplied requesting truncate CheckSum table
 			if (args.Length==2)
@@ -191,12 +190,12 @@ namespace NLog.File
 			}
 		}
 
-		static void ProcessDupes(DataTable dupes)
+		static void ProcessDupes()
 		{
-			DataTable myDupes = MyDb.DupesTable();
-			foreach(DataRow dupesRow in myDupes.Rows)
+			popsDataSet myDupes = MyDb.DupesTable();
+			foreach(popsDataSet.CheckSumDupsRow dupesRow in myDupes.CheckSumDups.Rows)
 			{
-				Console.WriteLine($"Id: {dupesRow.Field("Id")}, SHA: {dupesRow.Field('SHA')}");
+				Console.WriteLine($"Id: {dupesRow.Id}, SHA: {dupesRow.SHA}");
 			}
 
 		}
