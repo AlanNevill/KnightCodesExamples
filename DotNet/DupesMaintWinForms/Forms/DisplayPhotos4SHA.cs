@@ -13,7 +13,7 @@ namespace DupesMaintWinForms
 {
     public partial class DisplayPhotos4SHA : Form
     {
-        public CheckSum CheckSum1 { get; set; }
+        public popsDataSet.CheckSumDataTable _dupes { get; set; }
 
         public DisplayPhotos4SHA()
         {
@@ -21,21 +21,26 @@ namespace DupesMaintWinForms
         }
 
         // constructor called from form SelectBySHA passing in the CheckSum row for the selected SHA value
-        public DisplayPhotos4SHA(CheckSum checkSum)
+        public DisplayPhotos4SHA(popsDataSet.CheckSumDataTable dupes)
         {
             InitializeComponent();
-            CheckSum1 = checkSum;
+            _dupes = dupes;
             LoadCheckSumPhoto();
         }
 
         // called from constructor to load the CheckSum photos for the selected SHA into picture boxes ?? how many
         private void LoadCheckSumPhoto()
         {
+            popsDataSet.CheckSumRow photo1 = (popsDataSet.CheckSumRow)_dupes.Rows[0];
+            popsDataSet.CheckSumRow photo2 = (popsDataSet.CheckSumRow)_dupes.Rows[1];
+
             // to-do: needs to process a collection of CheckSum rows
             // 
             // CheckSum row passed in constructor 
             // Note the escape character used (@) when specifying the path.  
-            pictureBox1.Image = Image.FromFile(@CheckSum1.TheFileName);
+            pictureBox1.Image = Image.FromFile(@photo1.TheFileName);
+            pictureBox2.Image = Image.FromFile(@photo2.TheFileName);
+
         }
 
 

@@ -36,9 +36,14 @@ namespace DupesMaintWinForms
 
         private void CheckSum4SelectedSHA(string sha)
         {
-            popsDataSet popsDataSet = new popsDataSet();
+            popsDataSet _popsDataSet = new popsDataSet();
             var da = new SqlDataAdapter($"select * from CheckSum where SHA = '{sha}'", MyDb.Cn);
-            da.Fill(popsDataSet.CheckSum);
+            da.Fill(_popsDataSet.CheckSum);
+
+            popsDataSet.CheckSumDataTable dupes = _popsDataSet.CheckSum;
+
+            Form displayPhotos = new DisplayPhotos4SHA(dupes);
+            displayPhotos.Show();
 
         }
     }
