@@ -52,5 +52,19 @@ namespace DupesMaintWinForms
             displayPhotos.ShowDialog();
 
         }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (this.dataGridView1.SelectedRows.Count > 0)
+            {
+                //int id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value.ToString());
+                string SHA = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+
+                // call DisplayPhotos4SHA passing in the SHA of the selected duplicates
+                Form displayPhotos = new DisplayPhotos4SHA(SHA);
+                displayPhotos.ShowDialog();
+
+            }
+        }
     }
 }

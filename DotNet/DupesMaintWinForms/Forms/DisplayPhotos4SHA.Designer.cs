@@ -38,8 +38,11 @@
             this.dateTimePhoto2 = new System.Windows.Forms.DateTimePicker();
             this.cbPhoto2 = new System.Windows.Forms.CheckBox();
             this.cbPhoto1 = new System.Windows.Forms.CheckBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -117,7 +120,8 @@
             // cbPhoto2
             // 
             this.cbPhoto2.AutoSize = true;
-            this.cbPhoto2.Location = new System.Drawing.Point(487, 376);
+            this.cbPhoto2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbPhoto2.Location = new System.Drawing.Point(478, 362);
             this.cbPhoto2.Name = "cbPhoto2";
             this.cbPhoto2.Size = new System.Drawing.Size(72, 17);
             this.cbPhoto2.TabIndex = 9;
@@ -127,18 +131,36 @@
             // cbPhoto1
             // 
             this.cbPhoto1.AutoSize = true;
-            this.cbPhoto1.Location = new System.Drawing.Point(178, 376);
+            this.cbPhoto1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbPhoto1.Location = new System.Drawing.Point(191, 362);
             this.cbPhoto1.Name = "cbPhoto1";
             this.cbPhoto1.Size = new System.Drawing.Size(72, 17);
             this.cbPhoto1.TabIndex = 10;
             this.cbPhoto1.Text = "cbPhoto1";
             this.cbPhoto1.UseVisualStyleBackColor = true;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 409);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(702, 22);
+            this.statusStrip1.TabIndex = 11;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(112, 17);
+            this.toolStripStatusLabel.Text = "toolStripStatusLabel";
+            // 
             // DisplayPhotos4SHA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(966, 450);
+            this.ClientSize = new System.Drawing.Size(702, 431);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.cbPhoto1);
             this.Controls.Add(this.cbPhoto2);
             this.Controls.Add(this.dateTimePhoto2);
@@ -153,6 +175,8 @@
             this.Text = "DisplayPhotos4SHA";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,5 +194,7 @@
         private System.Windows.Forms.DateTimePicker dateTimePhoto2;
         private System.Windows.Forms.CheckBox cbPhoto2;
         private System.Windows.Forms.CheckBox cbPhoto1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
     }
 }

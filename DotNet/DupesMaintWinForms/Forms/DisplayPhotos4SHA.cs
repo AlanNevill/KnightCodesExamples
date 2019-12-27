@@ -28,7 +28,7 @@ namespace DupesMaintWinForms
             LoadCheckSumPhoto();
         }
 
-        // constructor called by SelectbySHA passing in the SHA string of the selected duplicates
+        // constructor called by form SelectbySHA passing in the SHA string of the selected duplicates
         public DisplayPhotos4SHA(string SHA)
         {
             InitializeComponent();
@@ -41,6 +41,8 @@ namespace DupesMaintWinForms
 
             // cast the query to an array of CheckSum rows
             var dupes = query.ToArray();
+
+            this.toolStripStatusLabel.Text = $"{dupes.Length} duplicate photos - {SHA}";
 
             // Note the escape character used (@) when specifying the path.  
             pictureBox1.Image = Image.FromFile(@dupes[0].TheFileName);
@@ -56,6 +58,8 @@ namespace DupesMaintWinForms
             dateTimePhoto1.Value = dupes[0].FileCreateDt;
             dateTimePhoto2.Value = dupes[1].FileCreateDt;
 
+            this.cbPhoto1.Text = $"Delete {dupes[0].Id.ToString()}";
+            this.cbPhoto2.Text = $"Delete {dupes[1].Id.ToString()}";
         }
 
         // called from constructor to load the CheckSum photos for the selected SHA into picture boxes ?? how many

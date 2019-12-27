@@ -40,7 +40,7 @@ where SHA in (
 )
 order by 2,1
 
-
+truncate table CheckSumDups;
 -- insert the files with duplicate SHA values into CheckSumDups
 insert CheckSumDups(Id, SHA)
 select Id, SHA
