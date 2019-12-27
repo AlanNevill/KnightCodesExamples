@@ -20,12 +20,42 @@ namespace DupesMaintWinForms
             InitializeComponent();
         }
 
-        // constructor called from form SelectBySHA passing in the CheckSum row for the selected SHA value
+        // constructor called from form SelectBySHA passing in the CheckSum rows for the selected SHA value
         public DisplayPhotos4SHA(popsDataSet.CheckSumDataTable dupes)
         {
             InitializeComponent();
             _dupes = dupes;
             LoadCheckSumPhoto();
+        }
+
+        // constructor called by SelectbySHA passing in the SHA string of the selected duplicates
+        public DisplayPhotos4SHA(string SHA)
+        {
+            InitializeComponent();
+
+            // instantiate the EF model PopsModel
+            var db = new PopsModel();
+
+            // query the model for the CheckSum rows with the selected SHA string
+            IQueryable<CheckSum> query = db.CheckSums.Where(checkSum => checkSum.SHA == SHA);
+
+            // cast the query to an array of CheckSum rows
+            var dupes = query.ToArray();
+
+            // Note the escape character used (@) when specifying the path.  
+            pictureBox1.Image = Image.FromFile(@dupes[0].TheFileName);
+            pictureBox2.Image = Image.FromFile(@dupes[1].TheFileName);
+
+            tbPhoto1.Text = dupes[0].TheFileName;
+            tbPhoto2.Text = dupes[1].TheFileName;
+
+            dateTimePhoto1.Format = DateTimePickerFormat.Custom;
+            dateTimePhoto2.Format = DateTimePickerFormat.Custom;
+            dateTimePhoto1.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+            dateTimePhoto2.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+            dateTimePhoto1.Value = dupes[0].FileCreateDt;
+            dateTimePhoto2.Value = dupes[1].FileCreateDt;
+
         }
 
         // called from constructor to load the CheckSum photos for the selected SHA into picture boxes ?? how many
@@ -47,6 +77,7 @@ namespace DupesMaintWinForms
             dateTimePhoto2.CustomFormat = "yyyy-MM-dd hh:mm:ss";
             dateTimePhoto1.Value = photo1.FileCreateDt;
             dateTimePhoto2.Value = photo2.FileCreateDt;
+
 
 
         }

@@ -8,7 +8,7 @@ namespace DupesMaintWinForms
     public partial class PopsModel : DbContext
     {
         public PopsModel()
-            : base("name=PopsModel")
+            : base(@"Data Source=(localDB)\MSSQLLocalDB;Initial Catalog=pops;Integrated Security=True")
         {
         }
 

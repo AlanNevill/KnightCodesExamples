@@ -30,10 +30,16 @@ namespace DupesMaintWinForms
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+            // call DisplayPhotos4SHA passing in the SHA of the selected duplicates
+            Form displayPhotos = new DisplayPhotos4SHA("A3-DD-FC-2F-05-CB-77-C7-87-81-05-F8-8D-C7-23-BE-91-6C-76-B8-6F-0F-3F-61-49-A4-72-3F-9E-E3-B8-72");
+            displayPhotos.ShowDialog();
+
             // get the CheckSum rows for a specific SHA value
-            CheckSum4SelectedSHA(@"A3-DD-FC-2F-05-CB-77-C7-87-81-05-F8-8D-C7-23-BE-91-6C-76-B8-6F-0F-3F-61-49-A4-72-3F-9E-E3-B8-72");
+            //CheckSum4SelectedSHA(@"A3-DD-FC-2F-05-CB-77-C7-87-81-05-F8-8D-C7-23-BE-91-6C-76-B8-6F-0F-3F-61-49-A4-72-3F-9E-E3-B8-72");
         }
 
+
+        // no longer used
         private void CheckSum4SelectedSHA(string sha)
         {
             popsDataSet _popsDataSet = new popsDataSet();
