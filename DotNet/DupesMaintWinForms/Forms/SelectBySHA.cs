@@ -50,8 +50,8 @@ namespace DupesMaintWinForms
 
             Form displayPhotos = new DisplayPhotos4SHA(dupes);
             displayPhotos.ShowDialog();
-
         }
+
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
