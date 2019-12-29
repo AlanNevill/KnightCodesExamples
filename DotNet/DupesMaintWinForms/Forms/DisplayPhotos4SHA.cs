@@ -17,6 +17,11 @@ namespace DupesMaintWinForms
 
         public PopsModel popsModel { get; set; }
         public CheckSum[] checkSums { get; set; }
+        public CheckSum Photo1 { get; set; }
+        public CheckSum Photo2 { get; set; }
+        public CheckSumDup[] checkSumDups { get; set; }
+        public CheckSumDup checkSumDup1 { get; set; }
+        public CheckSumDup checkSumDup2 { get; set; }
 
         public DisplayPhotos4SHA()
         {
@@ -41,29 +46,43 @@ namespace DupesMaintWinForms
             popsModel = new PopsModel();
 
             // query the model for the CheckSum rows with the selected SHA string
-            IQueryable<CheckSum> query = popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA);
+            IQueryable<CheckSum> query = popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA)
+                                                            .OrderByDescending(x => x.Id);
 
             // cast the query to an array of CheckSum rows
             checkSums = query.ToArray();
+            Photo1 = checkSums[0];
+            Photo2 = checkSums[1];
+
+            // get the CheckSumDup rows from the db for the 2 photos
+            IQueryable<CheckSumDup> query2 = popsModel.CheckSumDups.Where(a => a.Id == Photo1.Id || a.Id == Photo2.Id)
+                                                                   .OrderByDescending(b => b.Id);
+            this.checkSumDups = query2.ToArray();
+            this.checkSumDup1 = checkSumDups[0];
+            this.checkSumDup2 = checkSumDups[1];
 
             this.toolStripStatusLabel.Text = $"{checkSums.Length} duplicate photos - {SHA}";
 
             // Note the escape character used (@) when specifying the path.  
-            pictureBox1.Image = Image.FromFile(checkSums[0].TheFileName);
-            pictureBox2.Image = Image.FromFile(checkSums[1].TheFileName);
+            pictureBox1.Image = Image.FromFile(Photo1.TheFileName);
+            pictureBox2.Image = Image.FromFile(Photo2.TheFileName);
 
-            tbPhoto1.Text = checkSums[0].TheFileName;
-            tbPhoto2.Text = checkSums[1].TheFileName;
+            tbPhoto1.Text = Photo1.TheFileName;
+            tbPhoto2.Text = Photo2.TheFileName;
 
             dateTimePhoto1.Format = DateTimePickerFormat.Custom;
             dateTimePhoto2.Format = DateTimePickerFormat.Custom;
             dateTimePhoto1.CustomFormat = "yyyy-MM-dd hh:mm:ss";
             dateTimePhoto2.CustomFormat = "yyyy-MM-dd hh:mm:ss";
-            dateTimePhoto1.Value = checkSums[0].FileCreateDt;
-            dateTimePhoto2.Value = checkSums[1].FileCreateDt;
+            dateTimePhoto1.Value = Photo1.FileCreateDt;
+            dateTimePhoto2.Value = Photo2.FileCreateDt;
 
-            this.cbPhoto1.Text = $"Delete Id {checkSums[0].Id.ToString()}";
-            this.cbPhoto2.Text = $"Delete Id {checkSums[1].Id.ToString()}";
+            this.cbPhoto1.Text = $"Delete Id {Photo1.Id.ToString()}";
+            this.cbPhoto2.Text = $"Delete Id {Photo2.Id.ToString()}";
+
+            if (checkSumDup1.ToDelete.Equals("Y")) this.cbPhoto1.Checked = true;
+            if (checkSumDup2.ToDelete.Equals("Y")) this.cbPhoto2.Checked = true;
+
         }
 
         // no longer used
@@ -93,10 +112,30 @@ namespace DupesMaintWinForms
 
         private void cbPhoto1_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.cbPhoto1.Checked)
+            if (!this.cbPhoto1.Checked && checkSumDup1.ToDelete.Equals("Y")) 
             {
+                this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=N.";
 
+                checkSumDup1.ToDelete = "N";
+                popsModel.SaveChanges();
+
+                return;
             }
+
+            if (this.cbPhoto1.Checked && checkSumDup1.ToDelete.Equals("N"))
+            {
+                this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=Y.";
+
+                checkSumDup1.ToDelete = "Y";
+                popsModel.SaveChanges();
+
+                return;
+            }
+
+        }
+
+        private void cbPhoto1_Click(object sender, EventArgs e)
+        {
         }
     }
 }

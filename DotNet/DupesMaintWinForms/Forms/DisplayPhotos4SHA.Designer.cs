@@ -139,6 +139,7 @@
             this.cbPhoto1.Text = "cbPhoto1";
             this.cbPhoto1.UseVisualStyleBackColor = true;
             this.cbPhoto1.CheckedChanged += new System.EventHandler(this.cbPhoto1_CheckedChanged);
+            this.cbPhoto1.Click += new System.EventHandler(this.cbPhoto1_Click);
             // 
             // statusStrip1
             // 
