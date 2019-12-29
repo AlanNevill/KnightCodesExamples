@@ -63,7 +63,6 @@ namespace DupesMaintWinForms
                 // call DisplayPhotos4SHA passing in the SHA of the selected duplicates
                 Form displayPhotos = new DisplayPhotos4SHA(SHA);
                 displayPhotos.ShowDialog();
-
             }
         }
     }

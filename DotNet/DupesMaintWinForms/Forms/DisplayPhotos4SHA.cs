@@ -112,6 +112,13 @@ namespace DupesMaintWinForms
 
         private void cbPhoto1_CheckedChanged(object sender, EventArgs e)
         {
+            if (PreventBothChecked())
+            {
+                this.cbPhoto1.Checked = false;
+                this.toolStripStatusLabel.Text = "Photo2 is already checked. Uncheck Photo2 in order to check Photo1";
+                return;
+            }
+
             if (!this.cbPhoto1.Checked && checkSumDup1.ToDelete.Equals("Y")) 
             {
                 this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=N.";
@@ -134,8 +141,43 @@ namespace DupesMaintWinForms
 
         }
 
-        private void cbPhoto1_Click(object sender, EventArgs e)
+        private void cbPhoto2_CheckedChanged(object sender, EventArgs e)
         {
+            if (PreventBothChecked())
+            {
+                this.cbPhoto2.Checked = false;
+                this.toolStripStatusLabel.Text = "Photo1 is already checked. Uncheck Photo1 in order to check Photo2";
+                return;
+            }
+
+            if (!this.cbPhoto2.Checked && checkSumDup2.ToDelete.Equals("Y"))
+            {
+                this.toolStripStatusLabel.Text = $"{checkSumDup2.Id} ToDelete=N.";
+
+                checkSumDup2.ToDelete = "N";
+                popsModel.SaveChanges();
+
+                return;
+            }
+
+            if (this.cbPhoto2.Checked && checkSumDup2.ToDelete.Equals("N"))
+            {
+                this.toolStripStatusLabel.Text = $"{checkSumDup2.Id} ToDelete=Y.";
+
+                checkSumDup2.ToDelete = "Y";
+                popsModel.SaveChanges();
+
+                return;
+            }
+        }
+
+        private bool PreventBothChecked()
+        {
+            if (this.cbPhoto1.Checked && this.cbPhoto2.Checked)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
