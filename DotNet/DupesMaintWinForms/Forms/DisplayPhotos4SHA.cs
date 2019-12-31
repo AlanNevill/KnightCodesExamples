@@ -47,7 +47,7 @@ namespace DupesMaintWinForms
 
             // query the model for the CheckSum rows with the selected SHA string
             IQueryable<CheckSum> query = popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA)
-                                                            .OrderByDescending(x => x.Id);
+                                                            .OrderBy(x => x.Id);
 
             // cast the query to an array of CheckSum rows
             checkSums = query.ToArray();
@@ -56,7 +56,7 @@ namespace DupesMaintWinForms
 
             // get the CheckSumDup rows from the db for the 2 photos
             IQueryable<CheckSumDup> query2 = popsModel.CheckSumDups.Where(a => a.Id == Photo1.Id || a.Id == Photo2.Id)
-                                                                   .OrderByDescending(b => b.Id);
+                                                                   .OrderBy(b => b.Id);
             this.checkSumDups = query2.ToArray();
             this.checkSumDup1 = checkSumDups[0];
             this.checkSumDup2 = checkSumDups[1];
