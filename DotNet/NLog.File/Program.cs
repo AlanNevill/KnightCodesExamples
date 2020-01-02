@@ -26,9 +26,11 @@ namespace NLog.File
 
 		static void Main(string[] args)
 		{
+			var mainWatch = System.Diagnostics.Stopwatch.StartNew();
+
 			logger.Info("Nlog starting");
 
-			MyDb = new MyDbConnect(@"Server = (localDB)\MSSQLLocalDB; Integrated Security = true; database = pops");
+			MyDb = new MyDbConnect(@"Server = (localDB)\ProjectsV13; Integrated Security = true; database = pops");
 
 			//ProcessDupes();
 
@@ -40,11 +42,13 @@ namespace NLog.File
 
 			if (ValidateFolder(args[0]))
 			{
+				DbTest();
 				ProcessFiles(sourceDir);
-				CSVtest();
+				//CSVtest();
 			}
 
-
+			mainWatch.Stop();
+			Console.WriteLine($"Total execution time: {mainWatch.ElapsedMilliseconds/1000} seconds");
 			Console.WriteLine("Finished - press any key to close");
 			Console.ReadLine();
 
@@ -104,28 +108,28 @@ namespace NLog.File
 		{
 			string message = "{0},{1},{2},{3}";
 
-			//Process all the jpg files in the source directory tree
-			foreach (FileInfo fi in sourceDir.GetFiles("*", SearchOption.AllDirectories))
+			// Process all the jpg files in the source directory tree
+			foreach (FileInfo fi in sourceDir.GetFiles("*.jpg", SearchOption.AllDirectories))
 			{
-				//calculate the SHA string for the file
-				var result = CalcSHA(fi);
+				// calculate the SHA string for the file and return the time taken in ms in a tuple
+				var (SHA, timerMs) = CalcSHA(fi);
 
-				// write to CSV file
-				csvFile.Info(string.Format(message, 
-											fi.FullName,
-											fi.DirectoryName,
-											fi.Length,
-											result.SHA)
-					);
-				
 				// insert row into CheckSum table
-				CheckSum_ins(	result.SHA,
+				CheckSum_ins(	SHA,
 								fi.FullName, 
 								fi.Extension,
 								fi.CreationTimeUtc,
 								fi.DirectoryName,
 								fi.Length,
-								result.timerMs);
+								timerMs);
+
+				// write to CSV file - no longer used
+				//csvFile.Info(string.Format(message, 
+				//							fi.FullName,
+				//							fi.DirectoryName,
+				//							fi.Length,
+				//							result.SHA)
+				//	);
 			}
 		}
 
@@ -154,7 +158,7 @@ namespace NLog.File
 		}
 
 
-		// calculate the SHA256 checksum for the file and return it with the elapsed processing time using tuple
+		// calculate the SHA256 checksum for the file and return it with the elapsed processing time using a tuple
 		static (string SHA, int timerMs) CalcSHA(FileInfo fi)
 		{
 			var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -174,7 +178,7 @@ namespace NLog.File
 			return (SHA: bitString, timerMs: (int)watch.ElapsedMilliseconds);
 		}
 
-		static void DbTest(string connectionString)
+		static void DbTest()
 		{
 			// open the DB connection and save in variable Cn
 			//var dbCn = new MyDbConnect(connectionString);
@@ -184,11 +188,14 @@ namespace NLog.File
 			if (truncateCheckSum)
 			{
 				// clear the CheckSum table
-				using (SqlCommand sqlCmd = new SqlCommand("truncate table CheckSum", MyDb.Cn))
+				using (SqlCommand sqlCmd = new SqlCommand("truncate table CheckSum; truncate table CheckSumDups", MyDb.Cn))
 				{
 					sqlCmd.CommandType = CommandType.Text;
 					sqlCmd.ExecuteNonQuery();
+					Console.WriteLine($"SqlCommand executed: {sqlCmd.CommandText}");
 				}
+
+
 			}
 		}
 

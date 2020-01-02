@@ -20,6 +20,9 @@ insert into CheckSum(SHA,Folder,TheFileName) values	('1a-b5-f9-c7-92-00',	'C:\te
 													('2b-3c-4d-5e-9f-11',	'C:\test2',	'testName2.txt')
 						
 select * from CheckSum;
+select count(*) from CheckSum;
+select Timer=sum(timerMs)/1000 from Checksum;
+
 
 --find duplicate SHA values
 select SHA, count(*) as SHAcount
@@ -30,7 +33,7 @@ having count(*) > 1
 
 
 -- select the files with duplicate SHA values
-select id, SHA, TheFileName, FileCreateDt
+select id, SHA, TheFileName, FileCreateDt, FileSize
 from CheckSum
 where SHA in (
 	select SHA

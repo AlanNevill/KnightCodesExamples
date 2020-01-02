@@ -22,10 +22,15 @@ namespace DupesMaintWinForms
 
         private void SelectBySHA_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'popsDataSet.CheckSumDups' table. You can move, or remove it, as needed.
-            this.checkSumDupsTableAdapter.Fill(this.popsDataSet.CheckSumDups);
+            LoadCheckSumDups();
+            MyDb = new MyDbConnect(@"Server = (localDB)\ProjectsV13; Integrated Security = true; database = pops");
+        }
 
-            MyDb = new MyDbConnect(@"Server = (localDB)\MSSQLLocalDB; Integrated Security = true; database = pops");
+        private void LoadCheckSumDups()
+        {
+            // TODO: This line of code loads data into the 'popsDataSet.CheckSumDups' table. You can move, or remove it, as needed.
+            this.checkSumDupsTableAdapter.ClearBeforeFill = true;
+            this.checkSumDupsTableAdapter.Fill(this.popsDataSet.CheckSumDups);
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -63,6 +68,9 @@ namespace DupesMaintWinForms
                 // call DisplayPhotos4SHA passing in the SHA of the selected duplicates
                 Form displayPhotos = new DisplayPhotos4SHA(SHA);
                 displayPhotos.ShowDialog();
+
+                // reload the datagrid to display updates to ToDelete column
+                LoadCheckSumDups();
             }
         }
     }

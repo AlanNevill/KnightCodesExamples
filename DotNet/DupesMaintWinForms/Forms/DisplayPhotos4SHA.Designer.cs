@@ -70,7 +70,7 @@
             this.tbPhoto1.Location = new System.Drawing.Point(98, 325);
             this.tbPhoto1.Multiline = true;
             this.tbPhoto1.Name = "tbPhoto1";
-            this.tbPhoto1.Size = new System.Drawing.Size(267, 31);
+            this.tbPhoto1.Size = new System.Drawing.Size(267, 58);
             this.tbPhoto1.TabIndex = 2;
             // 
             // tbPhoto2
@@ -80,7 +80,7 @@
             this.tbPhoto2.Location = new System.Drawing.Point(388, 325);
             this.tbPhoto2.Multiline = true;
             this.tbPhoto2.Name = "tbPhoto2";
-            this.tbPhoto2.Size = new System.Drawing.Size(267, 31);
+            this.tbPhoto2.Size = new System.Drawing.Size(267, 58);
             this.tbPhoto2.TabIndex = 3;
             // 
             // label1
@@ -121,7 +121,7 @@
             // 
             this.cbPhoto2.AutoSize = true;
             this.cbPhoto2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbPhoto2.Location = new System.Drawing.Point(478, 362);
+            this.cbPhoto2.Location = new System.Drawing.Point(476, 389);
             this.cbPhoto2.Name = "cbPhoto2";
             this.cbPhoto2.Size = new System.Drawing.Size(72, 17);
             this.cbPhoto2.TabIndex = 9;
@@ -133,7 +133,7 @@
             // 
             this.cbPhoto1.AutoSize = true;
             this.cbPhoto1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbPhoto1.Location = new System.Drawing.Point(191, 362);
+            this.cbPhoto1.Location = new System.Drawing.Point(189, 389);
             this.cbPhoto1.Name = "cbPhoto1";
             this.cbPhoto1.Size = new System.Drawing.Size(72, 17);
             this.cbPhoto1.TabIndex = 10;

@@ -1,12 +1,4 @@
-﻿using DupesMaintWinForms;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 
 namespace DupesMaintWinForms
 {
@@ -19,13 +11,13 @@ namespace DupesMaintWinForms
             try
             {
                 // Build connection string
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
                 //builder.ConnectionString = "Data source=(localdb);Integrated Security=true;database=pops";
-                builder.IntegratedSecurity = true;
-                builder.DataSource = @"(localDB)\MSSQLLocalDB";   // update me
+                //builder.IntegratedSecurity = true;
+                //builder.DataSource = @"(localDB)\MSSQLLocalDB";   // update me
                 //builder.UserID = "";              // update me
                 //builder.Password = "";      // update me
-                builder.InitialCatalog = "pops";
+                //builder.InitialCatalog = "pops";
 
                 // Connect to SQL
                 SqlConnection connection = new SqlConnection(cnString);
