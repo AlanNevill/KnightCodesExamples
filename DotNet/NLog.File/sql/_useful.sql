@@ -8,12 +8,23 @@ use pops;
 -- test spCheckSum_ins
 exec spCheckSum_ins	@SHA			= '1a-3b-5c-7d-9e-0f',
 					@Folder			= 'c:\logs\nlog\',
-					@TheFileName	= 'file1.txt',
-					@FileExt		= '.php',
+					@TheFileName	= 'c:\logs\nlog\file1.txt',
+					@FileExt		= '.txt',
 					@FileSize		= 22,
 					@FileCreateDt	= '2019-12-22',
 					@TimerMs		= 9900034,
 					@Notes			= 'Notes 1'
+
+-- test spDupesAction_ins
+exec spDupesAction_ins	
+					@Folder					= 'c:\logs\nlog\',
+					@TheFileName			= 'c:\logs\nlog\file1.txt',
+					@SHA					= '1a-3b-5c-7d-9e-0f',
+					@FileExt				= '.txt',
+					@FileSize				= 0,
+					@FileCreateDt			= '2019-12-22',
+					@OneDriveRemoved		= 'N',
+					@GooglePhotosRemoved	= 'N'
 
 -- test data
 insert into CheckSum(SHA,Folder,TheFileName) values	('1a-b5-f9-c7-92-00',	'C:\test',	'testFileName.txt'),
@@ -56,4 +67,8 @@ where SHA in (
 )
 
 select * from CheckSumDups order by 2,1;
+
+select * from DupesAction;
+
+truncate table DupesAction;
 

@@ -31,7 +31,7 @@ namespace NLog.File
                 connection.Open();
                 Cn = connection;
             }
-            catch (SqlException e)
+            catch (SqlException)
             {
                 throw;
             }

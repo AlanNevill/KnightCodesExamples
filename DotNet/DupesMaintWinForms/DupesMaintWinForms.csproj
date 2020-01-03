@@ -125,8 +125,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckSum.cs" />
-    <Compile Include="CheckSumDup.cs" />
+    <Compile Include="Models\DupesAction.cs" />
+    <Compile Include="Models\CheckSum.cs" />
+    <Compile Include="Models\CheckSumDup.cs" />
     <Compile Include="Forms\DisplayPhotos4SHA.cs">
       <SubType>Form</SubType>
     </Compile>

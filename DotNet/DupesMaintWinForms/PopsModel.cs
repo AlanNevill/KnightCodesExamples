@@ -14,6 +14,7 @@ namespace DupesMaintWinForms
 
         public virtual DbSet<CheckSum> CheckSums { get; set; }
         public virtual DbSet<CheckSumDup> CheckSumDups { get; set; }
+        public virtual DbSet<DupesAction> DupesActions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -43,6 +44,32 @@ namespace DupesMaintWinForms
 
             modelBuilder.Entity<CheckSumDup>()
                 .Property(e => e.ToDelete)
+                .IsFixedLength()
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DupesAction>()
+                .Property(e => e.TheFileName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DupesAction>()
+                .Property(e => e.Folder)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DupesAction>()
+                .Property(e => e.SHA)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DupesAction>()
+                .Property(e => e.FileExt)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DupesAction>()
+                .Property(e => e.OneDriveRemoved)
+                .IsFixedLength()
+                .IsUnicode(false);
+
+            modelBuilder.Entity<DupesAction>()
+                .Property(e => e.GooglePhotosRemoved)
                 .IsFixedLength()
                 .IsUnicode(false);
         }

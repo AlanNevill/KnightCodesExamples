@@ -8,6 +8,7 @@ namespace DupesMaintWinForms
 {
     static class Program
     {
+        public static PopsModel popsModel { get; set; }
 
         /// <summary>
         /// The main entry point for the application.
@@ -15,6 +16,9 @@ namespace DupesMaintWinForms
         [STAThread]
         static void Main()
         {
+            // instaniate the data model
+            popsModel = new PopsModel();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new SelectBySHA());

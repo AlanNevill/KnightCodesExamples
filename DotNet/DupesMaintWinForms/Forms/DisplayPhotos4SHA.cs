@@ -15,7 +15,6 @@ namespace DupesMaintWinForms
     {
         public popsDataSet.CheckSumDataTable _dupes { get; set; }
 
-        public PopsModel popsModel { get; set; }
         public CheckSum[] checkSums { get; set; }
         public CheckSum Photo1 { get; set; }
         public CheckSum Photo2 { get; set; }
@@ -43,11 +42,11 @@ namespace DupesMaintWinForms
             InitializeComponent();
 
             // instantiate the EF model PopsModel
-            popsModel = new PopsModel();
+            //popsModel = new PopsModel();
 
             // query the model for the CheckSum rows with the selected SHA string
-            IQueryable<CheckSum> query = popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA)
-                                                            .OrderBy(x => x.Id);
+            IQueryable<CheckSum> query = Program.popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA)
+                                                                    .OrderBy(x => x.Id);
 
             // cast the query to an array of CheckSum rows
             checkSums = query.ToArray();
@@ -55,8 +54,8 @@ namespace DupesMaintWinForms
             Photo2 = checkSums[1];
 
             // get the CheckSumDup rows from the db for the 2 photos
-            IQueryable<CheckSumDup> query2 = popsModel.CheckSumDups.Where(a => a.Id == Photo1.Id || a.Id == Photo2.Id)
-                                                                   .OrderBy(b => b.Id);
+            IQueryable<CheckSumDup> query2 = Program.popsModel.CheckSumDups.Where(a => a.Id == Photo1.Id || a.Id == Photo2.Id)
+                                                                            .OrderBy(b => b.Id);
             this.checkSumDups = query2.ToArray();
             this.checkSumDup1 = checkSumDups[0];
             this.checkSumDup2 = checkSumDups[1];
@@ -124,7 +123,7 @@ namespace DupesMaintWinForms
                 this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=N.";
 
                 checkSumDup1.ToDelete = "N";
-                popsModel.SaveChanges();
+                Program.popsModel.SaveChanges();
 
                 return;
             }
@@ -134,7 +133,7 @@ namespace DupesMaintWinForms
                 this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=Y.";
 
                 checkSumDup1.ToDelete = "Y";
-                popsModel.SaveChanges();
+                Program.popsModel.SaveChanges();
 
                 return;
             }
@@ -155,7 +154,7 @@ namespace DupesMaintWinForms
                 this.toolStripStatusLabel.Text = $"{checkSumDup2.Id} ToDelete=N.";
 
                 checkSumDup2.ToDelete = "N";
-                popsModel.SaveChanges();
+                Program.popsModel.SaveChanges();
 
                 return;
             }
@@ -165,7 +164,7 @@ namespace DupesMaintWinForms
                 this.toolStripStatusLabel.Text = $"{checkSumDup2.Id} ToDelete=Y.";
 
                 checkSumDup2.ToDelete = "Y";
-                popsModel.SaveChanges();
+                Program.popsModel.SaveChanges();
 
                 return;
             }

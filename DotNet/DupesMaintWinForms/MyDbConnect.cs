@@ -26,7 +26,7 @@ namespace DupesMaintWinForms
             }
             catch (SqlException e)
             {
-                throw;
+                throw e;
             }
         }
 

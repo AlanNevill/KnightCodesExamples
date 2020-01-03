@@ -17,7 +17,6 @@ namespace NLog.File
 	{
 		public static Logger logger		= LogManager.GetLogger("fileLogger");
 		public static Logger csvFile	= LogManager.GetLogger("CSVfile");
-		//public static SqlConnection Cn { get; set; }
 
 		public static DirectoryInfo sourceDir;
 		public static Boolean truncateCheckSum = false;
@@ -31,8 +30,6 @@ namespace NLog.File
 			logger.Info("Nlog starting");
 
 			MyDb = new MyDbConnect(@"Server = (localDB)\ProjectsV13; Integrated Security = true; database = pops");
-
-			//ProcessDupes();
 
 			// check for 2nd argument supplied requesting truncate CheckSum table
 			if (args.Length==2)
@@ -100,13 +97,13 @@ namespace NLog.File
 			{
 				logger.Error(e);
 				Console.WriteLine($"The process failed: {e.ToString()}" );
-				return false;
+				throw;
 			}
 		}
 
 		static void ProcessFiles(DirectoryInfo sourceDir)
 		{
-			string message = "{0},{1},{2},{3}";
+			//string message = "{0},{1},{2},{3}";
 
 			// Process all the jpg files in the source directory tree
 			foreach (FileInfo fi in sourceDir.GetFiles("*.jpg", SearchOption.AllDirectories))
