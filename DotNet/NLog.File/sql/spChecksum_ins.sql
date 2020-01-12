@@ -26,7 +26,7 @@ CREATE PROCEDURE dbo.spCheckSum_ins
 	-- Add the parameters for the stored procedure here
 	@SHA			varchar(200),
 	@Folder			varchar(200),
-	@TheFileName	varchar(100),
+	@TheFileName	varchar(200),
 	@FileExt		varchar(10),
 	@FileSize		int,
 	@FileCreateDt	smalldatetime,

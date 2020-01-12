@@ -4,6 +4,7 @@ namespace DupesMaintWinForms
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using System.Data.SqlClient;
 
     public partial class PopsModel : DbContext
     {
@@ -15,6 +16,24 @@ namespace DupesMaintWinForms
         public virtual DbSet<CheckSum> CheckSums { get; set; }
         public virtual DbSet<CheckSumDup> CheckSumDups { get; set; }
         public virtual DbSet<DupesAction> DupesActions { get; set; }
+
+
+        // custom method to insert a new DupesAction row using the stored procedure spDupesAction_ins
+        public void DupesAction_ins(DupesAction dupesAction)
+        {
+            var theFileName         = new SqlParameter("@TheFileName", dupesAction.TheFileName);
+            var folder              = new SqlParameter("@Folder", dupesAction.Folder);
+            var sHA                 = new SqlParameter("@SHA", dupesAction.SHA);
+            var fileExt             = new SqlParameter("@FileExt", dupesAction.FileExt);
+            var fileSize            = new SqlParameter("@FileSize", dupesAction.FileSize);
+            var fileCreateDt        = new SqlParameter("@FileCreateDt", dupesAction.FileCreateDt);
+            var oneDriveRemoved     = new SqlParameter("@OneDriveRemoved", dupesAction.OneDriveRemoved);
+            var googlePhotosRemoved = new SqlParameter("@googlePhotosRemoved", dupesAction.GooglePhotosRemoved);
+
+            this.Database.ExecuteSqlCommand("exec spDupesAction_ins @TheFileName, @Folder, @SHA, @FileExt, @FileSize, @FileCreateDt, @OneDriveRemoved, @googlePhotosRemoved",
+                                                                    theFileName, folder, sHA, fileExt, fileSize, fileCreateDt, oneDriveRemoved, googlePhotosRemoved);
+        }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

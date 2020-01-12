@@ -13,6 +13,8 @@ namespace DupesMaintWinForms
 {
     public partial class DisplayPhotos4SHA : Form
     {
+
+
         public popsDataSet.CheckSumDataTable _dupes { get; set; }
 
         public CheckSum[] checkSums { get; set; }
@@ -30,9 +32,9 @@ namespace DupesMaintWinForms
         // constructor called from form SelectBySHA passing in the CheckSum rows for the selected SHA value
         public DisplayPhotos4SHA(popsDataSet.CheckSumDataTable dupes)
         {
-            InitializeComponent();
-            _dupes = dupes;
-            LoadCheckSumPhoto();
+            //InitializeComponent();
+            //_dupes = dupes;
+            //LoadCheckSumPhoto();
         }
 
 
@@ -41,46 +43,55 @@ namespace DupesMaintWinForms
         {
             InitializeComponent();
 
-            // instantiate the EF model PopsModel
-            //popsModel = new PopsModel();
-
             // query the model for the CheckSum rows with the selected SHA string
-            IQueryable<CheckSum> query = Program.popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA)
-                                                                    .OrderBy(x => x.Id);
+            IQueryable<CheckSum> query = Program.popsModel.CheckSums.Where(checkSum => checkSum.SHA == SHA).OrderBy(x => x.Id);
 
             // cast the query to an array of CheckSum rows
             checkSums = query.ToArray();
             Photo1 = checkSums[0];
             Photo2 = checkSums[1];
+            this.toolStripStatusLabel.Text = $"{checkSums.Length} duplicate photos - {SHA}";
 
             // get the CheckSumDup rows from the db for the 2 photos
-            IQueryable<CheckSumDup> query2 = Program.popsModel.CheckSumDups.Where(a => a.Id == Photo1.Id || a.Id == Photo2.Id)
-                                                                            .OrderBy(b => b.Id);
+            IQueryable<CheckSumDup> query2 = Program.popsModel.CheckSumDups.Where(a => a.Id == Photo1.Id || a.Id == Photo2.Id).OrderBy(b => b.Id);
             this.checkSumDups = query2.ToArray();
+
+            if (this.checkSumDups.Length==1)
+            {
+                this.toolStripStatusLabel.Text = "ERROR - Only 1 photo found for this SHA value.";
+                return;
+            }
+
             this.checkSumDup1 = checkSumDups[0];
             this.checkSumDup2 = checkSumDups[1];
 
-            this.toolStripStatusLabel.Text = $"{checkSums.Length} duplicate photos - {SHA}";
 
-            // Note the escape character used (@) when specifying the path.  
-            pictureBox1.Image = Image.FromFile(Photo1.TheFileName);
-            pictureBox2.Image = Image.FromFile(Photo2.TheFileName);
+            // Note the escape character used (@) when specifying the path. 
+            try
+            {
+                this.pictureBox1.Image = Image.FromStream(new MemoryStream(File.ReadAllBytes(@Photo1.TheFileName)));
+                this.pictureBox2.Image = Image.FromStream(new MemoryStream(File.ReadAllBytes(@Photo2.TheFileName)));
+            }
+            catch (Exception)
+            {
+                MessageBox.Show($"Truncation error - Photo1 {Photo1.TheFileName} or 2 {Photo2.TheFileName} could not be found.");
+                Close();
+            }
+            //this.pictureBox1.Image = Image.FromFile(Photo1.TheFileName);
+            //this.pictureBox2.Image = Image.FromFile(Photo2.TheFileName);
 
-            tbPhoto1.Text = Photo1.TheFileName;
-            tbPhoto2.Text = Photo2.TheFileName;
+            this.tbPhoto1.Text = Photo1.TheFileName;
+            this.tbPhoto2.Text = Photo2.TheFileName;
 
-            dateTimePhoto1.Format = DateTimePickerFormat.Custom;
-            dateTimePhoto2.Format = DateTimePickerFormat.Custom;
-            dateTimePhoto1.CustomFormat = "yyyy-MM-dd hh:mm:ss";
-            dateTimePhoto2.CustomFormat = "yyyy-MM-dd hh:mm:ss";
-            dateTimePhoto1.Value = Photo1.FileCreateDt;
-            dateTimePhoto2.Value = Photo2.FileCreateDt;
+            this.dateTimePhoto1.Format = DateTimePickerFormat.Custom;
+            this.dateTimePhoto2.Format = DateTimePickerFormat.Custom;
+            this.dateTimePhoto1.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+            this.dateTimePhoto2.CustomFormat = "yyyy-MM-dd hh:mm:ss";
+            this.dateTimePhoto1.Value = Photo1.FileCreateDt;
+            this.dateTimePhoto2.Value = Photo2.FileCreateDt;
 
-            this.cbPhoto1.Text = $"Delete Id {Photo1.Id.ToString()}";
-            this.cbPhoto2.Text = $"Delete Id {Photo2.Id.ToString()}";
-
-            if (checkSumDup1.ToDelete.Equals("Y")) this.cbPhoto1.Checked = true;
-            if (checkSumDup2.ToDelete.Equals("Y")) this.cbPhoto2.Checked = true;
+            this.cbPhoto1.Text = $"Move photo1 with Id {Photo1.Id.ToString()}";
+            this.cbPhoto2.Text = $"Move photo2 with Id {Photo2.Id.ToString()}";
 
         }
 
@@ -104,79 +115,148 @@ namespace DupesMaintWinForms
             dateTimePhoto2.CustomFormat = "yyyy-MM-dd hh:mm:ss";
             dateTimePhoto1.Value = photo1.FileCreateDt;
             dateTimePhoto2.Value = photo2.FileCreateDt;
-
-
-
         }
+
 
         private void cbPhoto1_CheckedChanged(object sender, EventArgs e)
         {
-            if (PreventBothChecked())
+            // move Photo1 in file system from OneDrive Photos folder to target root folder
+            if (!PhotoMove(Photo1))
             {
-                this.cbPhoto1.Checked = false;
-                this.toolStripStatusLabel.Text = "Photo2 is already checked. Uncheck Photo2 in order to check Photo1";
+                this.toolStripStatusLabel.Text = $"ERROR - Photo1.id {Photo1.Id} was not moved.";
                 return;
             }
 
-            if (!this.cbPhoto1.Checked && checkSumDup1.ToDelete.Equals("Y")) 
-            {
-                this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=N.";
+            // if move succeeds then write a new DupesAction row for Photo1
+            DupesAction_Insert(Photo1);
 
-                checkSumDup1.ToDelete = "N";
-                Program.popsModel.SaveChanges();
+            // delete Photo1 row from CheckSum table and delete Photo1 and Photo2 from CheckSumDups
+            Db_Delete(Photo1, checkSumDup1, checkSumDup2);
 
-                return;
-            }
-
-            if (this.cbPhoto1.Checked && checkSumDup1.ToDelete.Equals("N"))
-            {
-                this.toolStripStatusLabel.Text = $"{checkSumDup1.Id} ToDelete=Y.";
-
-                checkSumDup1.ToDelete = "Y";
-                Program.popsModel.SaveChanges();
-
-                return;
-            }
+            // close the form and SelectBySHA form will refresh without the 2 CheckSumDup rows
+            this.Close();
 
         }
 
         private void cbPhoto2_CheckedChanged(object sender, EventArgs e)
         {
-            if (PreventBothChecked())
+            // move Photo2 in file system from OneDrive Photos folder to target root folder
+            if (!PhotoMove(Photo2))
             {
-                this.cbPhoto2.Checked = false;
-                this.toolStripStatusLabel.Text = "Photo1 is already checked. Uncheck Photo1 in order to check Photo2";
+                this.toolStripStatusLabel.Text = $"ERROR - Photo2.id {Photo2.Id} was not moved.";
                 return;
             }
 
-            if (!this.cbPhoto2.Checked && checkSumDup2.ToDelete.Equals("Y"))
-            {
-                this.toolStripStatusLabel.Text = $"{checkSumDup2.Id} ToDelete=N.";
+            // if move succeeds then write a new DupesAction row for Photo1
+            DupesAction_Insert(Photo2);
 
-                checkSumDup2.ToDelete = "N";
-                Program.popsModel.SaveChanges();
+            // delete Photo1 row from CheckSum table and delete Photo1 and Photo2 from CheckSumDups
+            Db_Delete(Photo2, checkSumDup1, checkSumDup2);
 
-                return;
-            }
+            // close the form and SelectBySHA form will refresh without the 2 CheckSumDup rows
+            this.Close();
 
-            if (this.cbPhoto2.Checked && checkSumDup2.ToDelete.Equals("N"))
-            {
-                this.toolStripStatusLabel.Text = $"{checkSumDup2.Id} ToDelete=Y.";
-
-                checkSumDup2.ToDelete = "Y";
-                Program.popsModel.SaveChanges();
-
-                return;
-            }
         }
 
-        private bool PreventBothChecked()
+
+        // write new row into the DupesAction table
+        private void DupesAction_Insert(CheckSum photo)
         {
-            if (this.cbPhoto1.Checked && this.cbPhoto2.Checked)
+            // create a new DupesAction row
+            DupesAction dupesAction = new DupesAction();
+
+            dupesAction.TheFileName = photo.TheFileName;
+            dupesAction.Folder = photo.Folder;
+            dupesAction.SHA = photo.SHA;
+            dupesAction.FileExt = photo.FileExt;
+            dupesAction.FileSize = photo.FileSize;
+            dupesAction.FileCreateDt = photo.FileCreateDt;
+            dupesAction.OneDriveRemoved = "Y";
+            dupesAction.GooglePhotosRemoved = "N";
+
+            // call the custom stored procedure method in DbContext popsModel
+            Program.popsModel.DupesAction_ins(dupesAction);
+        }
+
+
+        // Move the file specified in CheckSum photo to a new directory
+        private bool PhotoMove(CheckSum photo)
+        {
+            // check if target folder exists, if not create it
+            string targetPath = TargetFolderCheck(photo);
+
+            // now move the file from source folder to target folder
+            return PhotoMove(photo, targetPath);
+        }
+
+
+        private string TargetFolderCheck(CheckSum photo)
+        {
+            string targetFolder = Program.targetRootFolder;
+
+            // make sure the targetRootFolder exists but only need to check once
+            if (!Program.targetRootFolderExists)
             {
+                DirectoryInfo diRoot = new DirectoryInfo(Program.targetRootFolder);
+                if (!diRoot.Exists)
+                {
+                    diRoot.Create();
+                }
+                Program.targetRootFolderExists = true;
+            }
+
+            // construct the targetFolder for this CheckSum photo
+            targetFolder += @photo.Folder.Substring(2);
+
+            // if target folder does not exist then create it
+            DirectoryInfo diTarget = new DirectoryInfo(targetFolder);
+            if (!diTarget.Exists)
+            {
+                diTarget.Create();
+            }
+            Console.WriteLine($"INFO - Target folder {photo.Folder} exists under {Program.targetRootFolder}.");
+
+            return targetFolder;
+        }
+
+
+        // Physically move the file from its source location to the target folder
+        private bool PhotoMove(CheckSum photo, string targetPath)
+        {
+            // construct the destPath including the file name
+            string[] sourceFolderParts = photo.TheFileName.Split('\\');
+            string fileName = sourceFolderParts[sourceFolderParts.Length - 1];
+            string destPath = targetPath + "\\" + fileName;
+
+            // instaniate a FileInfo object for the source file
+            FileInfo sourcePath = new FileInfo(photo.TheFileName);
+            try
+            {
+                // move the file from sourcePath to destPath
+                sourcePath.MoveTo(destPath);
+                Console.WriteLine($"INFO - File {photo.TheFileName} was moved to {destPath}.");
+
                 return true;
             }
-            return false;
+            catch (Exception Ex)
+            {
+                Console.WriteLine($"ERROR - File {photo.TheFileName} was NOT moved. See console.");
+
+                Program.DisplayException(Ex);
+                return false;
+            }
         }
+
+
+        // delete the CheckSum row that was moved so that CheckSum still reflects the folder scan, and remove the 2 CheckSumDups rows as the duplicate has been removed
+        private void Db_Delete(CheckSum photo1, CheckSumDup checkSumDup1, CheckSumDup checkSumDup2)
+        {
+            Program.popsModel.CheckSums.Remove(photo1);
+            Program.popsModel.CheckSumDups.Remove(checkSumDup1);
+            Program.popsModel.CheckSumDups.Remove(checkSumDup2);
+            Program.popsModel.SaveChanges();
+        }
+
+
     }
 }

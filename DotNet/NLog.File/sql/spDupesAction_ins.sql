@@ -14,7 +14,7 @@ go
 
 CREATE PROCEDURE dbo.spDupesAction_ins 
 	-- Add the parameters for the stored procedure here
-	@TheFileName			varchar(100),
+	@TheFileName			varchar(200),
 	@Folder					varchar(200),
 	@SHA					varchar(200),
 	@FileExt				varchar(10),

@@ -17,8 +17,8 @@ exec spCheckSum_ins	@SHA			= '1a-3b-5c-7d-9e-0f',
 
 -- test spDupesAction_ins
 exec spDupesAction_ins	
-					@Folder					= 'c:\logs\nlog\',
 					@TheFileName			= 'c:\logs\nlog\file1.txt',
+					@Folder					= 'c:\logs\nlog\',
 					@SHA					= '1a-3b-5c-7d-9e-0f',
 					@FileExt				= '.txt',
 					@FileSize				= 0,
@@ -30,7 +30,7 @@ exec spDupesAction_ins
 insert into CheckSum(SHA,Folder,TheFileName) values	('1a-b5-f9-c7-92-00',	'C:\test',	'testFileName.txt'),
 													('2b-3c-4d-5e-9f-11',	'C:\test2',	'testName2.txt')
 						
-select * from CheckSum;
+select * from CheckSum where id=4796;
 select count(*) from CheckSum;
 select Timer=sum(timerMs)/1000 from Checksum;
 
@@ -66,9 +66,17 @@ where SHA in (
 	having count(*) > 1
 )
 
-select * from CheckSumDups order by 2,1;
+--update CheckSumDups set ToDelete='N';
+
+select count(*) from CheckSumDups;
 
 select * from DupesAction;
 
-truncate table DupesAction;
+--truncate table DupesAction;
+
+--update DupesAction set OneDriveRemoved='Y';
+
+select * from DupesAction where LEN(TheFileName) = 100 and SUBSTRING(TheFileName,100,1) != 'G';
+
+update DupesAction set GooglePhotosRemoved = 'Y' from DupesAction where TheFileName  = 'C:\Users\User\OneDrive\Photos\1968\01\ben01 (1).jpg';
 

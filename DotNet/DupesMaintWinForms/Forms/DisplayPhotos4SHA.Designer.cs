@@ -123,9 +123,9 @@
             this.cbPhoto2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbPhoto2.Location = new System.Drawing.Point(476, 389);
             this.cbPhoto2.Name = "cbPhoto2";
-            this.cbPhoto2.Size = new System.Drawing.Size(72, 17);
+            this.cbPhoto2.Size = new System.Drawing.Size(102, 17);
             this.cbPhoto2.TabIndex = 9;
-            this.cbPhoto2.Text = "cbPhoto2";
+            this.cbPhoto2.Text = "Remove photo2";
             this.cbPhoto2.UseVisualStyleBackColor = true;
             this.cbPhoto2.CheckedChanged += new System.EventHandler(this.cbPhoto2_CheckedChanged);
             // 
@@ -133,11 +133,11 @@
             // 
             this.cbPhoto1.AutoSize = true;
             this.cbPhoto1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbPhoto1.Location = new System.Drawing.Point(189, 389);
+            this.cbPhoto1.Location = new System.Drawing.Point(182, 389);
             this.cbPhoto1.Name = "cbPhoto1";
-            this.cbPhoto1.Size = new System.Drawing.Size(72, 17);
+            this.cbPhoto1.Size = new System.Drawing.Size(102, 17);
             this.cbPhoto1.TabIndex = 10;
-            this.cbPhoto1.Text = "cbPhoto1";
+            this.cbPhoto1.Text = "Remove photo1";
             this.cbPhoto1.UseVisualStyleBackColor = true;
             this.cbPhoto1.CheckedChanged += new System.EventHandler(this.cbPhoto1_CheckedChanged);
             // 
